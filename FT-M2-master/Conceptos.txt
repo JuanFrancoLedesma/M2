@@ -1,0 +1,184 @@
+Conceptos de React
+
+4 componentes
+1 home donde se muestra el producto
+ cuando clickee en el componente se abren los detalles
+una nav
+con estados globales de redux
+
+
+React: es una libreria de JS, se trabaja dividiendo todo en componentes mas pequeños de facil acceso y utilizacion. Funciona de modo que una vez cargada la pagina se van a ir renderizando solo los cambios que se efectuen, ahorrando de esta forma muchos recursos. Se sigue el principio de srp, o single resposability principle, principio de unica responsabilidad, osea que cada componente se encarga de una sola tarea, ya sea contener algo o mostrar info.
+
+Webpack: gestor que permite juntar varios archivos en uno solo, que sera el que se muestre. Es decir, compila todo el codigo que escribamos. Lo mas importante es que se debe tener un starting point (archivo raiz, el cual esta enlazado a todos los demas archivos (componentes)), que transformaciones hacer (si hay que efectuar algun cambio para que sea legible, esto lo hacen los loader) y a donde guardar todo lo compilado (el archivo final)
+
+Componentes: van a estar escritos en jsx, una mezcla de js y xml (algo parecido a html pero que por si solo es contraintuitivo), que nos va a permitir crear componentes html de manera parecida a como creamos objetos en js, que luego BABEL se encarga de transforma a javascript plano, que luego react se encarga de transfomrar a HTML.
+
+Componente de clase: un componente creado mediante el sistema de clases. Se lo crea extendiendo la clase React.Component de la siguiente manera.
+Para usar las props que le pasen se las usa como {this.props.name}
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class HelloWorld extends React.Component {
+  render(){
+    return (
+      <div>
+        Hola, Soy Henry!!
+      </div>
+    )
+  }
+};      //la linea de abajo es la que indica que renderizar (<HelloWorld) y en donde (en el elemento que tenga el id = app)
+ReactDOM.render(<HelloWorld />, document.getElementById('app'));
+
+Componente de funcion: otra forma de crear componentes, con la ventaja de que al pasarle props, no necesitamos usar this, ni tampoco debemos bindear eventos
+Para usar las props que se le pasan solo debemos hacer {props.name}
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+function HelloWorldFunction() {
+  return(
+    <div>
+      Hola, Soy Henry!
+    </div>
+  )
+};
+ReactDOM.render(<HelloWorldFunction />, document.getElementById('app'));
+
+Props: datos que se les puede pasar a los componentes inicialmente (no se pueden modificar a priori, son inmutables). Se pasan escribiendo su nombre junto al tag: `<HelloWorld name='Henry />`. Son como una configuracion inicial.
+
+Eventos: 
+
+Tipos de eventos:
+onSubmit (nativo de React) => onSubmit={this.onButtonClick} //Aca se le esta pasando un 'escuchador', cuando se submitee (envie) el formulario, se va a ejecutar la funcion que le pasamos por parametro.
+
+Ref: al input se le agrego un ref, que lo identifica, por lo que luego se puede acceder a lo que tenga escrito mediante this.refs.name.value (name es el nombre que se le puso en el input (ref='name'))
+
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class HelloWorld extends React.Component {
+  constructor(props) {
+    super(props);
+    // Necesitamos el binding para hacer funcionar el this en el evento
+    this.onButtonClick = this.onButtonClick.bind(this);
+  }
+  onButtonClick(e){
+    e.preventDefault();
+    const name = this.refs.name.value;
+    alert(name);
+  }
+  render(){
+    return (
+      <div>
+        <form onSubmit={this.onButtonClick}>
+          <input type='text' ref='name' />
+          <button>Poner Nombre</button>
+        </form>
+        Hola, {this.props.name}!!
+      </div>  
+    )
+  }
+};
+ReactDOM.render(<HelloWorld name='Soy Henry!' />, document.getElementById('app'));
+
+Anidando componentes
+
+Se puede tener componentes que llamen a otros (principio de responsabilidad unica), de esta forma cada uno hace su trabajo. El componente padre le pasa la prop necesaria a su componente hijo.
+
+
+No olvidar usar destructuring para facilitar el uso de las props
+
+En el return va la estructura html que vamos a devolver
+
+Podemos armar componentes en distintos arhivos y exportarlos para usarlos solo cuando los necesitemos
+
+RECORDAR si en el export le dimos un nombre (varias cosas dsitnitas) debemos invocarlo arhivos
+import { Lista } from './MostrarLista.js';
+
+Sino simplemente podemos 
+import Lista from './MostrarLista.js';
+
+Donde Lista es un nombre a eleccion para usar el import en el archivo actual
+
+REACT Y FUNCIONES PURAS
+
+En lugar de tener funciones que tomen argumentos y retornen valores y objetos aca vamos a tener funciones que toman argumentos (props) y retortan interfaces de usuario (UI), componentes.
+
+Usando componentes de funciones de estado solo hay que definir las funciones y luego usarlas en la funcion que exportemos
+
+import React from 'React';
+
+const Foto = function(props) {
+  return <img src={'https://photo.fb.com/' + props.username} />
+};
+
+const Link = function(props) {
+  return (
+    <a href={'https://www.fb.com/' + props.username}
+      {props.username}
+    </a>
+  )
+}
+
+const Avatar = function(props) {
+  return (
+    <div>
+      <Foto username={props.username}/>
+      <Link username={props.username}/>
+    </div>
+  )
+};
+
+<Avatar username='atralice'/>
+
+De todos modos estos son componentes presentacionales, ya que solo reciben props y muestran algo, siempre de la misma forma.
+Se puede decir que se preocupan de como se ven las cosas y no de como funcionan, lo que si hace los componentes contenedores.
+
+
+ENtonces vamos a tener coponentes presentacionales en una carpeta componentes
+Y los elementos containers en la carpeta conteiners
+
+Nuestro archivo app va a llamar a los conteiners y estos van a llamar a los presentacionales.
+
+
+PROPIEDADES Y estados
+
+Las prop se pasan de padres a hijos a traves de la varaible prop
+
+Para acceder a lo que esta dentro de un tag (<Nombre></Nombre>) podemos usar this.props.children, que tomaria el valor 'SoyHenry'. Si dentro hay algo mas complejo, como varios tags, entonces sera un arreglo con cada uno.
+
+<Nombre>
+  SoyHenry
+</Nombre>
+
+<Nombre>
+  <Foto />
+  <Link />
+</Nombre>
+
+PropTypes
+
+Para controlar el tipo de dato que enviamos, dentro de la funcion podemos hacer algo arhivos
+
+import React from 'react';
+
+const PropTypes = React.PropTypes;  //Aca solo guarda el metodo en la variable para mayor facilidad de uso
+
+class Icono extends React.createClass {
+  propTypes: {
+    nombre: PropTypes.string.isRequired,
+    tamanio: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
+    style: PropTypes.object
+  }
+  render: ...
+};
+
+Le dice que la propiedad nombre debe ser una string, el tamanio un numero y asi 
+
+En jsx se utiliza className en lugar de class
+
+Hooks, nos permiten el suso de estados y otras caract sin el uso de clases

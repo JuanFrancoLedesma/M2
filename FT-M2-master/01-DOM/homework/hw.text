@@ -1,0 +1,14 @@
+* DOM
+
+El DOM (Document Object Model) es un modelo que representa la pagina web con una forma de arbol, para de esta forma
+poder verlo organizado, y nos permite agregar, quitar o modificar sus partes
+Es una api, es decir que nos define metodos para poder manipular la pagina web
+
+
+* DOM element selectors
+Metodos proporcionados por el DOM, que nos permite buscar elementos de la pagina a traves de un sistema de 
+id o clases, haciendo el proceso mucho mas facil que tener que iterar sobre los elementos del arbol
+
+
+* DOM events
+Son situaciones que se pueden dar en vivo, a las cuales podemos reaccionar con algun procesos establecido

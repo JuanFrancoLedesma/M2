@@ -1,0 +1,36 @@
+// Mixins acá
+.flex(@direction: row, @justify: center, @align: center){
+    display: flex;
+    flex-direction: @direction;
+    justify-content: @justify;
+    align-items: @align;
+    
+}
+
+.img(@radius: 20px){
+    border-radius: @radius;
+    width: 100%;
+}
+
+.btn(){
+    border: 1px solid #2e518b; /*anchura, estilo y color borde*/
+        padding: 10px; /*espacio alrededor texto*/
+        background-color: @btn-bg-color; /*color botón*/
+        color: #ffffff; /*color texto*/
+        text-decoration: none; /*decoración texto*/
+        text-transform: uppercase; /*capitalización texto*/
+        font-family: 'Helvetica', sans-serif; /*tipografía texto*/
+        border-radius: 20px; /*bordes redondos*/
+        width: min-content;
+}
+.btnPrim(@backcolor,@color,@backhov,@colorhov){
+    .btn();
+    background-color: @backcolor;
+    color: @color;
+
+    &:hover{
+        background-color: @backhov;
+        border: @colorhov solid 1px;
+        color: @colorhov;
+    }
+}

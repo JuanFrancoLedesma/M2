@@ -1,0 +1,15 @@
+.input{
+   
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+}
+
+.boton{
+    background-color: rgb(25, 37, 49);
+    color: rgba(5, 185, 5, 0.863);
+    margin: 5px;
+    border: rgba(5, 185, 5, 0.863) solid 1px;
+    border-radius: 3px;
+    padding: 5px;
+}
